@@ -78,7 +78,8 @@ const RULES = [
  * 店名からカテゴリを判定する
  */
 export function categorize(merchant) {
-  const upper = merchant.toUpperCase()
+  // normalize('NFKC') で全角→半角に変換してからマッチング
+  const upper = merchant.normalize('NFKC').toUpperCase()
   for (const rule of RULES) {
     if (rule.keywords.some(kw => upper.includes(kw.toUpperCase()))) {
       return rule.category
