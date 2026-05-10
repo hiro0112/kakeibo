@@ -1,3 +1,10 @@
+/**
+ * カテゴリ判定ルール（上から順に評価し、最初に一致したカテゴリを使用）
+ *
+ * 優先順位:
+ *   保険 → ゴルフ → 宿泊費 → AI関連 → ネット買い物
+ *   → 交通費 → サブスク → 食費 → 日用品 → 買い物 → その他
+ */
 const RULES = [
   {
     category: '保険',
@@ -13,11 +20,32 @@ const RULES = [
   },
   {
     category: 'AI関連',
-    keywords: ['OPENAI', 'ANTHROPIC', 'CHATGPT', 'CLAUDE', 'GEMINI', 'COPILOT', 'MIDJOURNEY', 'PERPLEXITY'],
+    keywords: ['AI', 'OPENAI', 'ANTHROPIC', 'CHATGPT', 'GEMINI', 'COPILOT', 'MIDJOURNEY', 'PERPLEXITY'],
   },
   {
     category: 'ネット買い物',
-    keywords: ['Amazon', 'アマゾン', 'AMAZON'],
+    // AMAZONは「買い物」より先にここで判定する
+    keywords: ['AMAZON', 'アマゾン'],
+  },
+  {
+    category: '交通費',
+    keywords: [
+      'JR', 'JAL', 'ANA', 'エーエヌエー',
+      '地下鉄', 'バス', 'タクシー',
+      '電鉄', '鉄道', 'メトロ', '急行', '特急',
+      'SUICA', 'PASMO', 'PITAPA', 'ICOCA',
+      '新幹線', '航空', 'エアライン', '空港',
+    ],
+  },
+  {
+    category: 'サブスク',
+    keywords: [
+      'NETFLIX', 'SPOTIFY', 'YOUTUBE',
+      'APPLE', 'DISNEY', 'HULU', 'DTV', 'U-NEXT',
+      'ADOBE', 'MICROSOFT', 'GOOGLE', 'DROPBOX',
+      'NHK', 'プレミアム',
+      'チョコザップ', 'アオバ', 'ノート',
+    ],
   },
   {
     category: '食費',
@@ -33,35 +61,6 @@ const RULES = [
     ],
   },
   {
-    category: '交通費',
-    keywords: [
-      'JR', '地下鉄', 'バス', 'タクシー',
-      '電鉄', '鉄道', 'メトロ', '急行', '特急',
-      'Suica', 'PASMO', 'PiTaPa', 'ICOCA',
-      '新幹線', '航空', 'エアライン', '空港',
-      'JAL', 'ANA', 'エーエヌエー',
-    ],
-  },
-  {
-    category: 'サブスク',
-    keywords: [
-      'Netflix', 'NETFLIX',
-      'Spotify', 'SPOTIFY',
-      'YouTube', 'YOUTUBE',
-      'Apple', 'Disney', 'Hulu', 'dTV', 'U-NEXT',
-      'Adobe', 'Microsoft', 'Google', 'Dropbox',
-      'NHK', 'プレミアム',
-      'チョコザップ', 'アオバ', 'ノート',
-    ],
-  },
-  {
-    category: '買い物',
-    keywords: [
-      '楽天', 'Rakuten', 'RAKUTEN',
-      'Yahoo', 'ヤフー', 'ZOZOTOWN', 'ゾゾ', 'メルカリ',
-    ],
-  },
-  {
     category: '日用品',
     keywords: [
       'ドラッグストア', 'ドラッグ',
@@ -72,16 +71,24 @@ const RULES = [
       'ホームセンター', 'コーナン', 'カインズ', 'ナフコ',
     ],
   },
+  {
+    category: '買い物',
+    keywords: [
+      '楽天', 'RAKUTEN', 'YAHOO', 'ヤフー', 'ZOZOTOWN', 'ゾゾ', 'メルカリ',
+    ],
+  },
 ]
 
 /**
  * 店名からカテゴリを判定する
+ * - normalize('NFKC') で全角→半角に変換
+ * - toUpperCase() で大文字に統一
+ * → amazon / Amazon / AMAZON / ＡＭＡＺＯＮ はすべて同じ扱い
  */
 export function categorize(merchant) {
-  // normalize('NFKC') で全角→半角に変換してからマッチング
-  const upper = merchant.normalize('NFKC').toUpperCase()
+  const normalized = merchant.normalize('NFKC').toUpperCase()
   for (const rule of RULES) {
-    if (rule.keywords.some(kw => upper.includes(kw.toUpperCase()))) {
+    if (rule.keywords.some(kw => normalized.includes(kw.toUpperCase()))) {
       return rule.category
     }
   }
