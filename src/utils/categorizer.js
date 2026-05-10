@@ -1,5 +1,25 @@
 const RULES = [
   {
+    category: '保険',
+    keywords: ['保険'],
+  },
+  {
+    category: 'ゴルフ',
+    keywords: ['ゴルフ'],
+  },
+  {
+    category: '宿泊費',
+    keywords: ['ラクテントラベル', 'アゴダ', 'AGODA'],
+  },
+  {
+    category: 'AI関連',
+    keywords: ['OPENAI', 'ANTHROPIC', 'CHATGPT', 'CLAUDE', 'GEMINI', 'COPILOT', 'MIDJOURNEY', 'PERPLEXITY'],
+  },
+  {
+    category: 'ネット買い物',
+    keywords: ['Amazon', 'アマゾン', 'AMAZON'],
+  },
+  {
     category: '食費',
     keywords: [
       'コンビニ', 'スーパー', 'レストラン',
@@ -18,15 +38,8 @@ const RULES = [
       'JR', '地下鉄', 'バス', 'タクシー',
       '電鉄', '鉄道', 'メトロ', '急行', '特急',
       'Suica', 'PASMO', 'PiTaPa', 'ICOCA',
-      '新幹線', '航空', 'エアライン', '空港', 'JAL', 'ANA',
-    ],
-  },
-  {
-    category: '買い物',
-    keywords: [
-      'Amazon', 'アマゾン', 'AMAZON',
-      '楽天', 'Rakuten', 'RAKUTEN',
-      'Yahoo', 'ヤフー', 'ZOZOTOWN', 'ゾゾ', 'メルカリ',
+      '新幹線', '航空', 'エアライン', '空港',
+      'JAL', 'ANA', 'エーエヌエー',
     ],
   },
   {
@@ -38,6 +51,14 @@ const RULES = [
       'Apple', 'Disney', 'Hulu', 'dTV', 'U-NEXT',
       'Adobe', 'Microsoft', 'Google', 'Dropbox',
       'NHK', 'プレミアム',
+      'チョコザップ', 'アオバ', 'ノート',
+    ],
+  },
+  {
+    category: '買い物',
+    keywords: [
+      '楽天', 'Rakuten', 'RAKUTEN',
+      'Yahoo', 'ヤフー', 'ZOZOTOWN', 'ゾゾ', 'メルカリ',
     ],
   },
   {

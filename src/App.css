@@ -321,12 +321,17 @@
   white-space: nowrap;
 }
 
-.badge-食費      { background: #fff3cd; color: #7a5800; }
-.badge-交通費    { background: #d1e7dd; color: #155724; }
-.badge-買い物    { background: #cfe2ff; color: #084298; }
-.badge-サブスク  { background: #e8d5f5; color: #5a1a8a; }
-.badge-日用品    { background: #fde8e8; color: #922b21; }
-.badge-その他    { background: #f0f0f0; color: #555; }
+.badge-食費       { background: #fff3cd; color: #7a5800; }
+.badge-交通費     { background: #d1e7dd; color: #155724; }
+.badge-買い物     { background: #cfe2ff; color: #084298; }
+.badge-ネット買い物 { background: #b6d4fe; color: #052c65; }
+.badge-サブスク   { background: #e8d5f5; color: #5a1a8a; }
+.badge-日用品     { background: #fde8e8; color: #922b21; }
+.badge-保険       { background: #d4edda; color: #155724; }
+.badge-ゴルフ     { background: #d0f0c0; color: #1a5c1a; }
+.badge-宿泊費     { background: #fce4d6; color: #7b2d00; }
+.badge-AI関連     { background: #e2d9f3; color: #3d1a6e; }
+.badge-その他     { background: #f0f0f0; color: #555; }
 
 /* ─── Pagination ──────────────────────────────── */
 .pagination {
