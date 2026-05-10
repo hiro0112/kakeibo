@@ -18,7 +18,7 @@
 
 ## GitHubリポジトリ
 
-（後で作成したURLを追記する）
+https://github.com/hiro0112/kakeibo
 
 ## セキュリティ方針
 
