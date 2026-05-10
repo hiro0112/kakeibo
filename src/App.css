@@ -40,6 +40,16 @@
   font-size: 0.9rem;
 }
 
+/* ─── Parse status ────────────────────────────── */
+.parse-status {
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+.parse-status--ok   { background: #d1e7dd; color: #155724; }
+.parse-status--warn { background: #fff3cd; color: #856404; }
+
 /* ─── Input Area ──────────────────────────────── */
 .input-area {
   background: white;
@@ -47,6 +57,45 @@
   padding: 1.5rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
+
+.input-area-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.input-area-head h2 {
+  font-size: 1.1rem;
+  color: #1a56b0;
+  margin: 0;
+}
+
+.loaded-info {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.88rem;
+  color: #555;
+}
+
+.btn-clear-inline {
+  background: none;
+  border: 1px solid #e53e3e;
+  color: #e53e3e;
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-clear-inline:hover { background: #e53e3e; color: white; }
+
+.file-hint { font-size: 0.82rem; color: #aaa; }
+
+.paste-label { font-size: 0.85rem; color: #777; margin-bottom: 0.4rem; }
 
 .input-area h2 {
   font-size: 1.1rem;
@@ -379,4 +428,80 @@
   font-size: 0.78rem;
   color: #888;
   word-break: break-all;
+}
+
+/* ─── Monthly section ─────────────────────────── */
+.monthly-section {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.monthly-header {
+  background: #f0f4ff;
+  padding: 1rem 1.5rem;
+  border-bottom: 2px solid #dde8ff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.monthly-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1a56b0;
+  margin: 0;
+}
+
+.monthly-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
+.monthly-total {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #1a56b0;
+  font-variant-numeric: tabular-nums;
+}
+
+.monthly-count {
+  font-size: 0.88rem;
+  color: #888;
+}
+
+.monthly-body {
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* monthly-body 内の tx-section は余白・影なし */
+.monthly-body .tx-section {
+  background: none;
+  box-shadow: none;
+  padding: 0;
+  border-radius: 0;
+}
+
+/* section-head h3 対応 */
+.section-head h3 {
+  font-size: 0.95rem;
+  color: #444;
+  font-weight: 600;
+}
+
+/* 取込元ファイル列 */
+.col-source {
+  font-size: 0.78rem;
+  color: #aaa;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

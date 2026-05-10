@@ -1,13 +1,5 @@
 import * as XLSX from 'xlsx'
-
-function calcCategories(transactions) {
-  const total = transactions.reduce((s, t) => s + t.amount, 0)
-  const byCategory = transactions.reduce((acc, t) => {
-    acc[t.category] = (acc[t.category] || 0) + t.amount
-    return acc
-  }, {})
-  return { total, byCategory }
-}
+import { groupByYearMonth, sortedYearMonths, formatYearMonth, calculateSummary } from './grouper'
 
 function downloadBlob(wb, filename) {
   const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' })
@@ -20,33 +12,54 @@ function downloadBlob(wb, filename) {
   URL.revokeObjectURL(url)
 }
 
-/**
- * Excelファイルを生成してダウンロードする
- * シート構成: サマリー / 明細一覧 / 読み取れなかった行
- */
-export function exportToExcel(transactions, unreadable) {
-  const { total, byCategory } = calcCategories(transactions)
-  const wb = XLSX.utils.book_new()
+function buildMonthSheet(transactions, ym) {
+  const { total, byCategory } = calculateSummary(transactions)
+  const label = formatYearMonth(ym)
 
-  // ── シート1: サマリー ──────────────────────────
-  const summaryRows = [
+  const rows = [
+    [`${label} サマリー`],
     ['支出合計（円）', total],
     [],
     ['カテゴリ', '合計金額（円）', '割合'],
     ...Object.entries(byCategory)
       .sort((a, b) => b[1] - a[1])
       .map(([cat, amt]) => [cat, amt, `${((amt / total) * 100).toFixed(1)}%`]),
+    [],
+    ['利用日', '利用先', '金額（円）', 'カテゴリ', '取込元ファイル'],
+    ...transactions
+      .sort((a, b) => b.date.localeCompare(a.date))
+      .map(t => [t.date, t.merchant, t.amount, t.category, t.sourceFileName]),
   ]
-  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(summaryRows), 'サマリー')
+  return XLSX.utils.aoa_to_sheet(rows)
+}
 
-  // ── シート2: 明細一覧 ──────────────────────────
-  const txRows = [
-    ['利用日', '利用先', '金額（円）', 'カテゴリ'],
-    ...transactions.map(t => [t.date, t.merchant, t.amount, t.category]),
+/**
+ * 年月別シート + 全明細シート + 読み取れなかった行シートを含む
+ * Excelファイルを生成してダウンロードする
+ */
+export function exportToExcel(allTransactions, unreadable) {
+  const wb = XLSX.utils.book_new()
+  const groups = groupByYearMonth(allTransactions)
+  const months = sortedYearMonths(groups)
+
+  // ── 年月別シート（新しい月が先） ───────────────────────────────
+  for (const ym of months) {
+    const ws = buildMonthSheet(groups[ym], ym)
+    // Excelのシート名は31文字以内・特殊文字不可
+    const sheetName = ym.replace('unknown', '日付不明').substring(0, 31)
+    XLSX.utils.book_append_sheet(wb, ws, sheetName)
+  }
+
+  // ── 全明細シート ───────────────────────────────────────────────
+  const allRows = [
+    ['利用日', '年月', '利用先', '金額（円）', 'カテゴリ', '取込元ファイル'],
+    ...allTransactions
+      .sort((a, b) => b.date.localeCompare(a.date))
+      .map(t => [t.date, t.yearMonth, t.merchant, t.amount, t.category, t.sourceFileName]),
   ]
-  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(txRows), '明細一覧')
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(allRows), '全明細')
 
-  // ── シート3: 読み取れなかった行 ───────────────
+  // ── 読み取れなかった行シート ───────────────────────────────────
   if (unreadable.length > 0) {
     const unreadRows = [['読み取れなかった行'], ...unreadable.map(r => [r])]
     XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(unreadRows), '読み取れなかった行')

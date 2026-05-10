@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 const PAGE_SIZE = 25
 
-export default function TransactionTable({ transactions }) {
+export default function TransactionTable({ transactions, showSource = false }) {
   const [page, setPage] = useState(0)
   const [filter, setFilter] = useState('')
 
@@ -11,7 +11,8 @@ export default function TransactionTable({ transactions }) {
         (t) =>
           t.merchant.includes(filter) ||
           t.category.includes(filter) ||
-          t.date.includes(filter),
+          t.date.includes(filter) ||
+          (showSource && t.sourceFileName?.includes(filter)),
       )
     : transactions
 
@@ -24,9 +25,9 @@ export default function TransactionTable({ transactions }) {
   }
 
   return (
-    <section className="tx-section">
+    <div className="tx-section">
       <div className="section-head">
-        <h2>明細一覧（{filtered.length}件）</h2>
+        <h3>明細一覧（{filtered.length}件）</h3>
         <input
           className="filter-input"
           type="text"
@@ -44,6 +45,7 @@ export default function TransactionTable({ transactions }) {
               <th>利用先</th>
               <th>金額</th>
               <th>カテゴリ</th>
+              {showSource && <th>取込元</th>}
             </tr>
           </thead>
           <tbody>
@@ -55,6 +57,7 @@ export default function TransactionTable({ transactions }) {
                 <td>
                   <span className={`badge badge-${t.category}`}>{t.category}</span>
                 </td>
+                {showSource && <td className="col-source">{t.sourceFileName}</td>}
               </tr>
             ))}
           </tbody>
@@ -74,6 +77,6 @@ export default function TransactionTable({ transactions }) {
           </button>
         </div>
       )}
-    </section>
+    </div>
   )
 }
